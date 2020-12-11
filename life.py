@@ -84,6 +84,9 @@ if __name__ == '__main__':
     board = Life(25, 25)
     running = True
     lifing = False
+    v = 500
+    fps = 60
+    clock = pygame.time.Clock()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -92,8 +95,15 @@ if __name__ == '__main__':
                 if event.key == pygame.K_SPACE:
                     lifing = not lifing
             if event.type == pygame.MOUSEBUTTONDOWN:
-                board.get_click(event.pos)
+                if not lifing:
+                    board.get_click(event.pos)
+            if event.type == pygame.MOUSEWHEEL:
+                if event.y == 1 and v < 1000:
+                    v += 50
+                if event.y == -1 and v >= 150:
+                    v -= 50
         if lifing:
+            clock.tick(v // fps)
             board.next_move()
         screen.fill((0, 0, 0))
         board.render(screen)
